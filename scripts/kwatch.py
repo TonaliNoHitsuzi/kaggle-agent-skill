@@ -181,6 +181,8 @@ def estimate(jobs, load_sec, per_item_sec):
 
 
 def quota_gpu_remaining_hours():
+    if not shutil.which("kaggle"):
+        return None
     try:
         out = kaggle(["quota", "--format", "json"], timeout=60)
         if out.returncode == 0 and out.stdout.strip():
@@ -422,6 +424,7 @@ def main():
                 result["output_files"] = []
                 tail = (f"[{SCRIPT_NAME}] OK: {ref} COMPLETE in {elapsed:.1f}min（output 拉取失败为 WARN：{payload}）")
             if args.smoke:
+                log(f"  冒烟 kernel 保留在云端（output 是冒烟证据），确认不需要可清理：kaggle kernels delete -k {ref}")
                 tail += "——冒烟通过，去全量：去掉 --smoke 重跑"
             break
         if any(d in status for d in TERMINAL_DEAD):

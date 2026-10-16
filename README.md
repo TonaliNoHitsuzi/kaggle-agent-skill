@@ -13,7 +13,7 @@ Kaggle 给每个账号每周 30 小时免费 GPU（Tesla T4 x2）。大陆玩家
 把本仓库 clone 到你的 agent skills 目录（或直接引用本仓库路径）：
 
 ```bash
-git clone https://github.com/<你的地址>/kaggle-agent-skill.git
+git clone https://github.com/TonaliNoHitsuzi/kaggle-agent-skill.git
 ```
 
 之后对 AI 说"kaggle 白嫖 GPU"之类的需求即可，AI 会按 `SKILL.md` 的操作手册路由。
@@ -60,7 +60,10 @@ kaggle-agent-skill/
 
 ## 反馈
 
-往 `feedback/ISSUES.jsonl` 追加一行：
+两条通道，分工如下：
+
+- **GitHub Issues**（欢迎讨论、提问）：https://github.com/TonaliNoHitsuzi/kaggle-agent-skill/issues
+- **结构化台账**（bug/doc/idea 快速记录，开 PR 往 `feedback/ISSUES.jsonl` 追加一行）：
 
 ```json
 {"date": "2026-10-16", "type": "bug|doc|idea", "severity": "P1|P2|P3", "note": "一句话描述"}

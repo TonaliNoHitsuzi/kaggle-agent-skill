@@ -35,19 +35,20 @@ def load_proxy_from_settings():
             data = json.loads(candidate.read_text(encoding="utf-8"))
             proxy = (data.get("proxy") or {}).get("https") or ""
             if proxy:
-                return proxy, str(candidate)
+                http_proxy = (data.get("proxy") or {}).get("http") or proxy
+                return proxy, http_proxy, str(candidate)
         except Exception:
             continue
-    return "", ""
+    return "", "", ""
 
 
 def ensure_proxy_env():
     if os.environ.get("HTTPS_PROXY") or os.environ.get("https_proxy"):
         return "env HTTPS_PROXY/HTTP_PROXY"
-    proxy, where = load_proxy_from_settings()
+    proxy, http_proxy, where = load_proxy_from_settings()
     if proxy:
         os.environ["HTTPS_PROXY"] = proxy
-        os.environ["HTTP_PROXY"] = (json.loads(Path(where).read_text(encoding="utf-8")).get("proxy") or {}).get("http") or proxy
+        os.environ["HTTP_PROXY"] = http_proxy
         return f"config/settings.json（{where}）"
     return "未配置（直连）"
 
@@ -180,9 +181,7 @@ def check_quota(ctx):
     found, _ = ctx["creds"]
     if not found:
         return "WARN", "无凭据，跳过配额查询（先解决 credentials 项）"
-    data, err = ctx.get("quota", (None, None)) if isinstance(ctx.get("quota"), tuple) else (None, None)
-    if data is None:
-        data, err = query_quota_json()
+    data, err = query_quota_json()
     if data:
         gpu = next((r for r in data if r.get("resource") == "GPU"), None)
         if gpu:
