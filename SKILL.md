@@ -31,7 +31,7 @@ Kaggle 每周给每个账号 30 小时免费 GPU（T4 x2）。本 skill 让 AI �
 | 没有 Kaggle 账号 / 卡在注册验证 | 走【阶段 0】陪跑注册，生成 kaggle.json |
 | 拿到 kaggle.json，不确定环境行不行 | 跑 `python scripts/doctor.py`，一次暴露全部问题 |
 | 想先确认链路和 GPU 可用 | 走【阶段 2】两阶 hello world，到此为止，别预设用途 |
-| 要提交/已有任务在跑 | `python scripts/kwatch.py -p <kernel目录>` 一键 push→轮询→拉结果 |
+| 要提交/已有任务在跑 | 大任务先 `--smoke` 冒烟再全量：`python scripts/kwatch.py -p <kernel目录>`（预检/心跳/拉结果一体） |
 | 想知道这周还剩多少 GPU 时长 | `python scripts/quota.py` |
 | 要传大文件（模型/数据集，GB 级） | `python scripts/uploader.py -p <dataset目录>`，先看【大陆网络】一节 |
 | 要跑生图/推理等具体应用 | 读 `references/t2i-case-study.md` 照抄改造 |
@@ -110,13 +110,16 @@ print("device:", torch.cuda.get_device_name(0))
 ### 阶段 3：日常闭环（提交-等算力-收结果）
 
 ```bash
-python scripts/kwatch.py -p <kernel目录>              # push→轮询→完成后自动拉 output 到 <kernel目录>/output/
-python scripts/kwatch.py -p <kernel目录> --watch-only # 已 push 过，只盯状态和拉结果
-python scripts/quota.py                               # 提交前查这周还剩几小时
-python scripts/uploader.py -p <dataset目录>           # 传大文件：代理自检+308进度+断点重试
+python scripts/kwatch.py -p <kernel目录> --smoke       # 大任务先冒烟：batch 缩前 2 项跑通全链路
+python scripts/kwatch.py -p <kernel目录>               # 全量：预检三连(估时/查余额)→push→心跳轮询→拉结果
+python scripts/kwatch.py -p <kernel目录> --watch-only  # 已 push 过，只盯状态和拉结果
+python scripts/quota.py                                # 提交前查这周还剩几小时
+python scripts/uploader.py -p <dataset目录>            # 传大文件：代理自检+308进度+断点重试
 ```
 
-节奏建议：本地决策好参数 → push KB 级 kernel（模型走 Dataset 挂载，不随 kernel 传）→ 干别的去 → kwatch 通知完成 → 拉 output 评审。完整方法论见 `references/pipeline-pattern.md`。
+kwatch v2 行为要点（对 AI）：push 前自动**预检三连**——估时（JOBS 结构；缺省耗时参数取自生图案例，其他负载提醒用户 `--load-sec/--per-item-sec` 覆盖）、GPU 余量警告（不阻塞）、冒烟提示；push 经**推送副本**注入任务指纹 JOB_ID（源码零污染）；等待期解析 kernel 心跳行 `PROGRESS n/N [tag] job=<id>` 显示进度（kernel 不打心跳就只显示 RUNNING）；结果落 `out/时间戳_任务指纹/`；每 10 次成功运行提示一次 out/ 累积大小——看到 MAINT 提示转告用户，由人决定清理。
+
+节奏建议：本地决策好参数 → 冒烟 → 全量（模型走 Dataset 挂载，不随 kernel 传）→ 干别的去 → kwatch 通知完成 → 拉 out/ 评审。完整方法论见 `references/pipeline-pattern.md`。
 
 ## CLI 速查（kaggle 原生命令，2.x 实测）
 

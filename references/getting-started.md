@@ -105,13 +105,13 @@ print(sys.version)
 }
 ```
 
-提交并等结果（一键脚本会自动：推送 → 轮询状态 → 完成后拉回输出到 `hello-cpu/output/`）：
+提交并等结果（一键脚本会自动：预检 → 推送 → 轮询状态 → 完成后把结果拉到 `hello-cpu/out/时间戳_任务指纹/`）：
 
 ```bash
 python scripts/kwatch.py -p hello-cpu
 ```
 
-第一次 push 会创建这个 kernel，约 1-3 分钟跑完。看到末行 `[kwatch] OK: ... COMPLETE ...` 且 `hello-cpu/output/` 里出现文件，链路即通。
+第一次 push 会创建这个 kernel，约 1-3 分钟跑完。看到末行 `[kwatch] OK: ... COMPLETE ...` 且 `hello-cpu/out/` 里出现带时间戳的结果目录，链路即通。
 
 > 手动等价命令（了解即可）：`kaggle kernels push -p hello-cpu` → `kaggle kernels status -k your-username/hello-cpu` → `kaggle kernels output -k your-username/hello-cpu -p hello-cpu/output`
 
@@ -135,6 +135,8 @@ python scripts/kwatch.py -p hello-gpu
 output 里出现 `cuda: True` 和 `NVIDIA Tesla T4`——**恭喜，每周 30 小时的免费算力已经在你手里了。**
 
 > GPU kernel 从 push 到 COMPLETE 一般 3-6 分钟（含排队和环境准备）。之后每次改代码重跑，`kaggle kernels push` 同一个 `id` 就是新版本。
+>
+> kwatch 每次提交前会自动"预检"（估时、查 GPU 余量），hello world 这种小任务直接忽略即可；跑大任务时它会帮你把关。
 
 ## 7. 下一步去哪
 

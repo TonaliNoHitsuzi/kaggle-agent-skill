@@ -28,7 +28,7 @@ git clone https://github.com/<你的地址>/kaggle-agent-skill.git
 |---|---|---|
 | `doctor.py` | 环境自检：CLI/凭据/代理/GCS/配额六项一次暴露 | `python scripts/doctor.py` |
 | `quota.py` | 查本周 GPU/TPU 余量 | `python scripts/quota.py` |
-| `kwatch.py` | 一键 push kernel → 轮询状态 → 自动拉 output | `python scripts/kwatch.py -p <kernel目录>` |
+| `kwatch.py` | 预检三连(估时/查余额/冒烟) → push → 心跳轮询 → 自动拉 output 到时间戳目录 | `python scripts/kwatch.py -p <kernel目录>` |
 | `uploader.py` | 大文件上传增强：代理自检 + GCS 308 进度探针 + 断点重试 | `python scripts/uploader.py -p <dataset目录>` |
 
 统一契约：退出码 0/1（成功/异常）；stdout 末行 `[脚本名] OK/FAIL: 摘要`；加 `--json` 输出机器可解析结果。依赖：Python 3.8+、`pip install kaggle`（2.x 为佳）。

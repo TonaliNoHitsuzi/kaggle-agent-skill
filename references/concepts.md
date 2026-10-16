@@ -59,7 +59,8 @@ Kernel 是 Kaggle 云端的一个 Python 沙箱（也支持 R 等），分两种
 
 - kernel 里写入 `/kaggle/working/` 的一切都是 output：图片、JSON、模型文件……
 - **commit 运行的 output 持久保存（上限 20GB）**，随时可拉：`kaggle kernels output -k 用户名/slug -p 本地目录`
-- 想拿到结构化结果，习惯是 kernel 末尾写一个 `metadata.json`（记录参数、耗时、产物清单），配合图片/数据文件一起拉回。
+- 本地惯例（kwatch 自动执行）：结果拉到 `out/时间戳_任务指纹/`——时间戳区分轮次，任务指纹（job_id，任务配置的哈希）区分实验，多次运行天然归档不互相覆盖。
+- 想拿到结构化结果，习惯是 kernel 末尾写一个 `report.json`（首字段 job_id，记录参数、耗时、产物清单），配合图片/数据文件一起拉回。
 
 ## commit vs interactive：两种运行方式
 
@@ -112,10 +113,10 @@ QUEUED（排队等卡）→ RUNNING（运行中）→ COMPLETE（成功）
 │   └── t2i-models/              # 大文件 + dataset-metadata.json（只上传一次，之后 version）
 ├── kernels/
 │   ├── hello-gpu/               # 轻量 kernel：kernel.py + kernel-metadata.json
-│   │   └── output/              # kwatch 自动拉回的结果落这里
+│   │   └── out/                 # kwatch 自动拉回的结果（每次运行一个 时间戳_任务指纹/ 子目录）
 │   └── t2i-runner/
 │       ├── kernel.py
 │       ├── kernel-metadata.json
-│       └── output/
+│       └── out/
 └── config/settings.json         # 本机代理等配置（gitignore，别提交）
 ```
