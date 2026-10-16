@@ -1,0 +1,83 @@
+{
+  "jobs": {
+    "model": "sd_xl_base_1.0.safetensors",
+    "size": 1024,
+    "steps": 25,
+    "cfg": 7.5,
+    "negative": "lowres, bad anatomy, bad hands, watermark, blurry, jpeg artifacts",
+    "batch": [
+      {
+        "prompt": "A serene mountain lake at sunrise, mist over water, pine forest, golden light, ultra detailed, professional landscape photography",
+        "seeds": [
+          42,
+          43
+        ]
+      },
+      {
+        "prompt": "Cute robot barista making coffee in a cozy cafe, warm lighting, pixar style, 3d render, highly detailed",
+        "seeds": [
+          42,
+          43
+        ]
+      },
+      {
+        "prompt": "Isometric illustration of a futuristic data center, clean minimal style, soft colors, vector art",
+        "seeds": [
+          42,
+          43
+        ]
+      }
+    ]
+  },
+  "results": [
+    {
+      "file": "images/00_s42.png",
+      "prompt": "A serene mountain lake at sunrise, mist over water, pine forest, golden light, ultra detailed, professional landscape photography",
+      "seed": 42,
+      "steps": 25,
+      "cfg": 7.5,
+      "seconds": 24.1
+    },
+    {
+      "file": "images/01_s43.png",
+      "prompt": "A serene mountain lake at sunrise, mist over water, pine forest, golden light, ultra detailed, professional landscape photography",
+      "seed": 43,
+      "steps": 25,
+      "cfg": 7.5,
+      "seconds": 22.4
+    },
+    {
+      "file": "images/02_s42.png",
+      "prompt": "Cute robot barista making coffee in a cozy cafe, warm lighting, pixar style, 3d render, highly detailed",
+      "seed": 42,
+      "steps": 25,
+      "cfg": 7.5,
+      "seconds": 24.1
+    },
+    {
+      "file": "images/03_s43.png",
+      "prompt": "Cute robot barista making coffee in a cozy cafe, warm lighting, pixar style, 3d render, highly detailed",
+      "seed": 43,
+      "steps": 25,
+      "cfg": 7.5,
+      "seconds": 25.7
+    },
+    {
+      "file": "images/04_s42.png",
+      "prompt": "Isometric illustration of a futuristic data center, clean minimal style, soft colors, vector art",
+      "seed": 42,
+      "steps": 25,
+      "cfg": 7.5,
+      "seconds": 28.0
+    },
+    {
+      "file": "images/05_s43.png",
+      "prompt": "Isometric illustration of a futuristic data center, clean minimal style, soft colors, vector art",
+      "seed": 43,
+      "steps": 25,
+      "cfg": 7.5,
+      "seconds": 27.4
+    }
+  ],
+  "total_seconds": 301.9
+}

@@ -1,0 +1,13 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# skill 机密（真值配置与凭据永不开源）
+config/settings.json
+**/credential*.json
+**/*_credential.json
+.env*
+
+# agent 运行态
+.scratch/
