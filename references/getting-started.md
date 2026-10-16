@@ -12,7 +12,7 @@ Kaggle（Google 旗下数据科学平台）给每个通过手机验证的账号*
 
 ## 1. 注册账号（5 分钟）
 
-1. 打开 https://www.kaggle.com/account/login ，点 **Register with Google**（推荐，用现成 Google 账号）或邮箱注册。
+1. 打开 <https://www.kaggle.com/account/login> ，点 **Register with Google**（推荐，用现成 Google 账号）或邮箱注册。
 2. 填昵称、选感兴趣领域（随便选，不影响功能）。
 
 ## 2. 手机验证（关键门槛，不过这关没有 GPU）
@@ -56,7 +56,7 @@ python scripts/doctor.py
 
 预期输出类似：
 
-```
+```text
 [PASS] python: 3.12.4
 [PASS] kaggle-cli: kaggle CLI 2.2
 [PASS] credentials: kaggle.json（C:\Users\you\.kaggle）
@@ -83,6 +83,7 @@ python scripts/doctor.py
 **新建文件夹 `hello-cpu`**，放两个文件：
 
 `hello-cpu/kernel.py`：
+
 ```python
 print("hello from kaggle cpu")
 import sys
@@ -90,6 +91,7 @@ print(sys.version)
 ```
 
 `hello-cpu/kernel-metadata.json`（**把 `your-username` 换成你的 Kaggle 用户名**，就是网页右上角头像处的那个 ID）：
+
 ```json
 {
   "id": "your-username/hello-cpu",

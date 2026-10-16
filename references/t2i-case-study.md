@@ -186,7 +186,7 @@ python scripts/kwatch.py -p t2i-runner
 
 约 5 分钟后（首次排队另计），`t2i-runner/output/` 里出现：
 
-```
+```text
 images/00_s42.png ... 05_s43.png
 contact_sheet.png
 metadata.json

@@ -4,7 +4,7 @@
 
 ## 一张图看懂数据流
 
-```
+```text
 你的电脑                                Kaggle 云端
 ─────────                              ──────────────────────────────
 hello-gpu/kernel.py        ──push──▶   kernel（脚本沙箱）
@@ -89,7 +89,7 @@ Kernel 是 Kaggle 云端的一个 Python 沙箱（也支持 R 等），分两种
 
 push 之后 kernel 走这个状态流：
 
-```
+```text
 QUEUED（排队等卡）→ RUNNING（运行中）→ COMPLETE（成功）
                                   └→ ERROR / CANCEL（失败/取消）
 ```
@@ -106,7 +106,7 @@ QUEUED（排队等卡）→ RUNNING（运行中）→ COMPLETE（成功）
 
 ## 惯用目录结构（本地）
 
-```
+```text
 我的kaggle项目/
 ├── datasets/
 │   └── t2i-models/              # 大文件 + dataset-metadata.json（只上传一次，之后 version）

@@ -53,7 +53,7 @@ Kaggle 每周给每个账号 30 小时免费 GPU（T4 x2）。本 skill 让 AI �
 
 注册/手机验证/生成 token 必须人类完成，你的职责是逐步引导 + 话术安抚，**绝不经手凭据文件**：
 
-1. 指引用户开 https://www.kaggle.com/account/login 用 Google 账号注册（或邮箱注册）。
+1. 指引用户开 <https://www.kaggle.com/account/login> 用 Google 账号注册（或邮箱注册）。
 2. 手机验证：Settings → Phone Verification。大陆 +86 手机号可收验证码；若收不到，建议换 Google 账号绑定境外号或稍后重试——此步过不了就没有 GPU 权限。
 3. 生成 API token：Settings → API → **Create New Token**，浏览器下载 `kaggle.json`。
 4. 指引用户把 `kaggle.json` 放到主目录 `~/.kaggle/kaggle.json`（Windows 即 `C:\Users\<用户名>\.kaggle\kaggle.json`），**不要放进本仓库/任何 git 目录**。类 Unix 系统补一句 `chmod 600 ~/.kaggle/kaggle.json`。
@@ -74,12 +74,14 @@ python scripts/doctor.py --json   # 机器可读结果
 **第一阶 CPU 验链路**（不占 GPU 配额）：新建目录，放两个文件——
 
 `kernel.py`：
+
 ```python
 print("hello from kaggle cpu")
 import sys; print(sys.version)
 ```
 
 `kernel-metadata.json`（`your-username` 换成实际用户名）：
+
 ```json
 {
   "id": "your-username/hello-cpu",
