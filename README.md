@@ -62,7 +62,7 @@ kaggle-agent-skill/
 
 两条通道，分工如下：
 
-- **GitHub Issues**（欢迎讨论、提问）：https://github.com/TonaliNoHitsuzi/kaggle-agent-skill/issues
+- **GitHub Issues**（欢迎讨论、提问）：<https://github.com/TonaliNoHitsuzi/kaggle-agent-skill/issues>
 - **结构化台账**（bug/doc/idea 快速记录，开 PR 往 `feedback/ISSUES.jsonl` 追加一行）：
 
 ```json

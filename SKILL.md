@@ -156,6 +156,7 @@ kernel-metadata.json 关键字段：`id`（`用户名/slug`）/ `code_file` / `k
 - **凭据零入库**：kaggle.json / access_token 只存在于用户主目录 `~/.kaggle/`；任何情况下不复制进仓库、不写进日志、不 echo 内容。
 - **ToS 友好**：表述统一用"免费额度利用 / free GPU quota"；不做多账号、不写额度规避类内容，用户问就说明这是 Kaggle 服务条款红线。
 - **不改云端别人的东西**：delete/overwrite 操作前必须向用户复述目标 slug 并确认。
+- **`--cleanup-smoke` 须用户明示**：该开关会删除云端冒烟 kernel，AI 代跑时不得自作主张添加；用户明确说"清理冒烟垃圾/删掉冒烟 kernel"才可用。
 - 脚本契约（四件套统一）：退出码 0=健康/成功、1=异常；stdout 末行 `[脚本名] OK/FAIL: 摘要`；`--json` 输出机器可解析结果。
 
 ## references 索引（人类可读，按需分发）

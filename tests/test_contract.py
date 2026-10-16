@@ -109,6 +109,23 @@ class KwatchContract(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 kwatch.build_push_copy(d, meta, "abcd1234", smoke=True)
 
+    def test_cleanup_smoke_without_smoke_is_warned_and_ignored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            d = make_kernel_dir(Path(tmp) / "ok")
+            rc, out = run_py([SCRIPTS / "kwatch.py", "-p", d, "--dry-run", "--cleanup-smoke"])
+            self.assertEqual(rc, 0)
+            self.assertIn("仅在 --smoke 模式下生效", out)
+            self.assertTrue(last_line(out).startswith("[kwatch] OK:"))
+
+    def test_smoke_cleanup_dry_run_plan(self):
+        code = "JOBS = {'batch': [{'a': 1}, {'b': 2}, {'c': 3}]}\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            d = make_kernel_dir(Path(tmp) / "smoky", code=code)
+            rc, out = run_py([SCRIPTS / "kwatch.py", "-p", d, "--dry-run", "--smoke", "--cleanup-smoke"])
+            self.assertEqual(rc, 0)
+            self.assertIn("冒烟模式", out)
+            self.assertTrue(last_line(out).startswith("[kwatch] OK:"))
+
 
 class UploaderContract(unittest.TestCase):
 

@@ -259,6 +259,18 @@ def fetch_logs_tail(ref, lines=40):
     return [ln for ln in text.splitlines() if ln.strip()][-lines:]
 
 
+def cleanup_smoke_kernel(ref, log, result):
+    out = kaggle(["kernels", "delete", "-k", ref], timeout=120)
+    combined = ((out.stdout or "") + (out.stderr or "")).strip()
+    if out.returncode == 0:
+        msg = f"冒烟 kernel 已清理：{ref}"
+        log("  cleanup | " + msg)
+    else:
+        msg = f"冒烟 kernel 清理失败（不阻塞冒烟结论，可手动删：kaggle kernels delete -k {ref}）：{combined[-200:]}"
+        log("  cleanup | WARN " + msg)
+    result["cleanup"] = msg
+
+
 def out_dir_for(kernel_dir, job_id):
     stamp = time.strftime("%Y%m%d-%H%M")
     return Path(kernel_dir) / "out" / f"{stamp}_{job_id}"
@@ -296,6 +308,7 @@ def main():
     parser = argparse.ArgumentParser(description="kaggle-agent kwatch v2：预检 → push → 心跳轮询 → 拉 output")
     parser.add_argument("-p", "--path", required=True, help="kernel 目录（含 kernel-metadata.json）")
     parser.add_argument("--smoke", action="store_true", help="冒烟模式：JOBS.batch 缩至前 2 项，用临时 -smoke kernel")
+    parser.add_argument("--cleanup-smoke", action="store_true", help="冒烟 COMPLETE 拉取 output 后删除云端 -smoke kernel（仅 --smoke 生效）")
     parser.add_argument("--watch-only", action="store_true", help="不 push，只轮询既有 kernel")
     parser.add_argument("--dry-run", action="store_true", help="预检+校验并打印计划，不提交")
     parser.add_argument("--timeout-min", type=int, default=360, help="最长守候分钟数（默认 360）")
@@ -324,6 +337,10 @@ def main():
               "elapsed_min": None, "output_dir": None, "output_files": None, "smoke": args.smoke}
 
     log(f"[{SCRIPT_NAME}] kernel={ref} job_id={job_id} gpu={bool(meta.get('enable_gpu'))}")
+
+    if args.cleanup_smoke and not args.smoke:
+        log("  WARN | --cleanup-smoke 仅在 --smoke 模式下生效，本次忽略（不会清理正式 kernel）")
+        args.cleanup_smoke = False
 
     if not args.no_precheck and not args.watch_only:
         pre = precheck(jobs, args, log)
@@ -424,7 +441,10 @@ def main():
                 result["output_files"] = []
                 tail = (f"[{SCRIPT_NAME}] OK: {ref} COMPLETE in {elapsed:.1f}min（output 拉取失败为 WARN：{payload}）")
             if args.smoke:
-                log(f"  冒烟 kernel 保留在云端（output 是冒烟证据），确认不需要可清理：kaggle kernels delete -k {ref}")
+                if args.cleanup_smoke:
+                    cleanup_smoke_kernel(ref, log, result)
+                else:
+                    log(f"  冒烟 kernel 保留在云端（output 是冒烟证据），确认不需要可清理：kaggle kernels delete -k {ref}")
                 tail += "——冒烟通过，去全量：去掉 --smoke 重跑"
             break
         if any(d in status for d in TERMINAL_DEAD):
