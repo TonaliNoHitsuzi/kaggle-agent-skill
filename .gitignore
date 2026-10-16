@@ -11,3 +11,6 @@ config/settings.json
 
 # agent 运行态
 .scratch/
+
+# 内部协作文档（本地保留，不对外发布）
+SPEC.md
